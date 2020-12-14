@@ -50,7 +50,9 @@ func parse_event (line []byte) *Event {
 
 	return &e
 
-}  
+}
+
+func detect_number_of_chains (events []*Event{})
 
 func main () {
 	var filename string = ""
