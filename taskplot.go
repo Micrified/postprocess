@@ -5,7 +5,8 @@ import (
 	// Standard packages
 	"fmt"
 	"os"
-
+	"sort"
+	
 	// Custom packages
 	"analysis"
 
@@ -42,6 +43,11 @@ func main () {
 	if nil != err {
 		panic(err.Error())
 	}
+
+	// Sort the log file chronologically
+	sort.SliceStable(events, func(i, j int) bool {
+		return events[i].Start_us < events[j].Start_us
+	})
 
 	// Output the chain information
 	warn("---- Expected chains (from JSON file) ----")
