@@ -40,7 +40,8 @@ func parse_event (line []byte) *Event {
 	n, err := fmt.Sscanf(s, "{executor: %d, chain: %d, callback: %d, start: %d, duration: %d}",
 		&(e.Executor), &(e.Chain), &(e.Callback), &(e.Start), &(e.Duration))
 	if nil != err {
-		panic(err)
+		reason := fmt.Sprintf("On line: \"%s\": %s", s, err.Error())
+		panic(reason)
 	}
 
 	// Check if successful
@@ -52,7 +53,7 @@ func parse_event (line []byte) *Event {
 
 }
 
-func detect_number_of_chains (events []*Event{})
+
 
 func main () {
 	var filename string = ""

@@ -66,4 +66,30 @@ func main () {
 			result.WCRT_us, result.ACRT_us, result.BCRT_us)
 	}
 
+	// Normalize all results, and append it to the given file
+	// Results are 1:1 with chains
+	// chain_id chain_count rand_seed mode bcrt wcrt acrt util period prio
+	for i, result := range results {
+
+		b2s := func (x bool) int {
+			if x {
+				return 1
+			}
+			return 0
+		}
+
+		chain_id    := result.ID
+		chain_count := len(chains)
+		chain_len   := len(chains[i].Path)
+		rand_seed   := chains[i].Random_seed
+		mode        := b2s(chains[i].PPE)
+		period      := chains[i].Period_us
+		util        := chains[i].Utilisation
+		bcrt        := result.BCRT_us
+		wcrt        := result.WCRT_us
+		acrt        := result.ACRT_us
+		fmt.Printf("%d %d %d %d %d %d %f %d %d %d\n",
+			chain_id, chain_count, chain_len, rand_seed, mode, period, util, bcrt, wcrt, acrt)
+	}
+
 }

@@ -1,9 +1,10 @@
+import sys
 import pandas as pd
 import plotly.graph_objs as go
 from plotly.offline import init_notebook_mode, iplot
 # init_notebook_mode()
 
-df = pd.read_csv('ros.csv')
+df = pd.read_csv(sys.argv[1])
 df.columns = ['executor', 'chain', 'callback', 'start', 'duration']
 # df['duration'] = df['end'] - df['start']
 
