@@ -51,9 +51,8 @@ func main () {
 
 	// To avoid possible overflow errors later, subtract earliest time from all logs
 	if len(events) > 0 {
-		first := events[0]
 		for i := 1; i < len(events); i++ {
-			events[i].Start_us -= first.Start_us
+			events[i].Start_us -= events[0].Start_us
 		}
 		events[0].Start_us = 0
 	}
