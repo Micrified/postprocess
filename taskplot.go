@@ -49,6 +49,15 @@ func main () {
 		return events[i].Start_us < events[j].Start_us
 	})
 
+	// To avoid possible overflow errors later, subtract earliest time from all logs
+	if len(events) > 0 {
+		first := events[0]
+		for i := 1; i < len(events); i++ {
+			events[i].Start_us -= first.Start_us
+		}
+		events[0].Start_us = 0
+	}
+
 	// Output the chain information
 	fmt.Fprintf(os.Stderr, "---- Expected chains (from JSON file) ----")
 	for _, chain := range chains {
@@ -84,11 +93,11 @@ func main () {
 		chain_len     := len(chains[i].Path)
 		period        := chains[i].Period_us
 		util          := chains[i].Utilisation
-		bcrt          := float64(result.BCRT_us) / float64(period) 
-		wcrt          := float64(result.WCRT_us) / float64(period)
-		acrt          := float64(result.ACRT_us) / float64(period)
+		bcrt          := result.BCRT_us
+		wcrt          := result.WCRT_us
+		acrt          := result.ACRT_us
 
-		fmt.Fprintf(os.Stdout, "%d %d %d %d %f %f %f %f ",
+		fmt.Fprintf(os.Stdout, "%d %d %d %d %f %d %d %d ",
 			chain_id, chain_prio, chain_len, period, util, bcrt, wcrt, acrt)
 
 		// General test attributes
