@@ -50,19 +50,19 @@ func main () {
 	})
 
 	// Output the chain information
-	warn("---- Expected chains (from JSON file) ----")
+	fmt.Fprintf(os.Stderr, "---- Expected chains (from JSON file) ----")
 	for _, chain := range chains {
-		fmt.Printf("Chain %d: Prio: %d, Path: %s, Period: %dus, Utilisation: %f\n",
+		fmt.Fprintf(os.Stderr, "Chain %d: Prio: %d, Path: %s, Period: %dus, Utilisation: %f\n",
 			chain.ID, chain.Prio, analysis.Path2String(chain.Path), chain.Period_us,
 			chain.Utilisation)
 	}
 
 	// Compute analysis
-	warn("---- Analyzing %d events ----", len(events))
+	fmt.Fprintf(os.Stderr, "---- Analyzing %d events ----", len(events))
 	results := analysis.Analyze(chains, events)
-	warn("---- Results ----")
+	fmt.Fprintf(os.Stderr, "---- Results ----")
 	for _, result := range results {
-		fmt.Printf("Chain %d: WCRT: %dus, ACRT: %dus, BCRT: %dus\n", result.ID, 
+		fmt.Fprintf(os.Stderr, "Chain %d: WCRT: %dus, ACRT: %dus, BCRT: %dus\n", result.ID, 
 			result.WCRT_us, result.ACRT_us, result.BCRT_us)
 	}
 
@@ -78,18 +78,29 @@ func main () {
 			return 0
 		}
 
-		chain_id    := result.ID
-		chain_count := len(chains)
-		chain_len   := len(chains[i].Path)
-		rand_seed   := chains[i].Random_seed
-		mode        := b2s(chains[i].PPE)
-		period      := chains[i].Period_us
-		util        := chains[i].Utilisation
-		bcrt        := result.BCRT_us
-		wcrt        := result.WCRT_us
-		acrt        := result.ACRT_us
-		fmt.Printf("%d %d %d %d %d %d %f %d %d %d\n",
-			chain_id, chain_count, chain_len, rand_seed, mode, period, util, bcrt, wcrt, acrt)
-	}
+		// Chain specific attributes
+		chain_id      := result.ID
+		chain_prio    := chains[i].Prio
+		chain_len     := len(chains[i].Path)
+		period        := chains[i].Period_us
+		util          := chains[i].Utilisation
+		bcrt          := float64(result.BCRT_us) / float64(period) 
+		wcrt          := float64(result.WCRT_us) / float64(period)
+		acrt          := float64(result.ACRT_us) / float64(period)
 
+		fmt.Fprintf(os.Stdout, "%d %d %d %d %f %f %f %f ",
+			chain_id, chain_prio, chain_len, period, util, bcrt, wcrt, acrt)
+
+		// General test attributes
+		chain_count   := len(chains)
+		chain_avg_len := chains[i].Avg_len
+		rand_seed     := chains[i].Random_seed
+		merge_p       := chains[i].Merge_p
+		sync_p        := chains[i].Sync_p
+		variance      := chains[i].Variance
+		mode          := b2s(chains[i].PPE)
+
+		fmt.Fprintf(os.Stdout, "%d %d %d %f %f %f %d\n",
+			chain_count, chain_avg_len, rand_seed, merge_p, sync_p, variance, mode)
+	}
 }
