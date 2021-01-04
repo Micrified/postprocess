@@ -66,8 +66,8 @@ func main () {
 	}
 
 	// Compute analysis
-	fmt.Fprintf(os.Stderr, "---- Analyzing %d events ----\n", len(events))
-	results := analysis.Analyze(chains, events)
+	fmt.Fprintf(os.Stderr, "---- Analysing %d events ----\n", len(events))
+	results := analysis.Analyse(chains, events)
 	fmt.Fprintf(os.Stderr, "---- Results ----\n")
 	for _, result := range results {
 		fmt.Fprintf(os.Stderr, "Chain %d: WCRT: %dus, ACRT: %dus, BCRT: %dus\n", result.ID, 
