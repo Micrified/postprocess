@@ -58,7 +58,7 @@ func main () {
 	}
 
 	// Output the chain information
-	fmt.Fprintf(os.Stderr, "---- Expected chains (from JSON file) ----")
+	fmt.Fprintf(os.Stderr, "---- Expected chains (from JSON file) ----\n")
 	for _, chain := range chains {
 		fmt.Fprintf(os.Stderr, "Chain %d: Prio: %d, Path: %s, Period: %dus, Utilisation: %f\n",
 			chain.ID, chain.Prio, analysis.Path2String(chain.Path), chain.Period_us,
@@ -66,9 +66,9 @@ func main () {
 	}
 
 	// Compute analysis
-	fmt.Fprintf(os.Stderr, "---- Analyzing %d events ----", len(events))
+	fmt.Fprintf(os.Stderr, "---- Analyzing %d events ----\n", len(events))
 	results := analysis.Analyze(chains, events)
-	fmt.Fprintf(os.Stderr, "---- Results ----")
+	fmt.Fprintf(os.Stderr, "---- Results ----\n")
 	for _, result := range results {
 		fmt.Fprintf(os.Stderr, "Chain %d: WCRT: %dus, ACRT: %dus, BCRT: %dus\n", result.ID, 
 			result.WCRT_us, result.ACRT_us, result.BCRT_us)
